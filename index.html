@@ -1834,8 +1834,32 @@ let currentUser = null;
 async function initAuth() {
   loadQuestions();
 
-  // Handle magic link redirect (token in URL hash)
-  const { data: { session }, error } = await sb.auth.getSession();
+  // If token is in URL hash (magic link landed on wrong path), 
+  // extract and set session manually before Supabase picks it up
+  const hash = window.location.hash;
+  if (hash && hash.includes('access_token=')) {
+    try {
+      const params = new URLSearchParams(hash.substring(1));
+      const access_token = params.get('access_token');
+      const refresh_token = params.get('refresh_token');
+      if (access_token && refresh_token) {
+        const { data, error } = await sb.auth.setSession({ access_token, refresh_token });
+        if (data?.session) {
+          currentUser = data.session.user;
+          await ensureProfile(data.session.user);
+          // Clean URL
+          history.replaceState(null, '', window.location.pathname);
+          showWelcomeAsLoggedIn();
+          return;
+        }
+      }
+    } catch(e) {
+      console.error('Token parse error:', e);
+    }
+  }
+
+  // Check existing session
+  const { data: { session } } = await sb.auth.getSession();
   if (session) {
     currentUser = session.user;
     await ensureProfile(session.user);
@@ -1843,7 +1867,7 @@ async function initAuth() {
     return;
   }
 
-  // Listen for auth state changes (magic link click)
+  // Listen for auth state changes (magic link click on correct path)
   sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
       currentUser = session.user;
