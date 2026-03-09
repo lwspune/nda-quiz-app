@@ -216,6 +216,10 @@ body {
 ════════════════════════════════ */
 #s-setup {
   padding: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .setup-header {
@@ -280,6 +284,8 @@ body {
   flex: 1;
   padding: 20px;
   overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0; /* critical: allows flex child to shrink below content size */
 }
 
 .section-title {
@@ -381,6 +387,14 @@ body {
   background: #f7f6f2;
   border-top: 1px solid #e0ddd5;
   flex-shrink: 0;
+}
+.setup-sticky-btn {
+  position: sticky;
+  bottom: 0;
+  padding: 12px 0 20px;
+  background: linear-gradient(to bottom, transparent, #f7f6f2 30%);
+  margin-top: 16px;
+  z-index: 10;
 }
 
 /* ════════════════════════════════
@@ -784,6 +798,256 @@ body {
   .summary-score-row { gap: 16px; }
   .sum-val { font-size: 28px; }
 }
+
+  /* ── TOPIC PICKER ── */
+  .topic-picker {
+    display: none;
+    background: #f7f6f2;
+    border: 1.5px solid #1e4035;
+    border-radius: 12px;
+    padding: 12px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+    animation: fadeUp 0.2s ease;
+  }
+
+  .topic-picker.open { display: block; }
+
+  .topic-picker-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #9999aa;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .topic-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .topic-pill {
+    background: #fff;
+    border: 1.5px solid #e0ddd5;
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #3a3a52;
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+
+  .topic-pill:hover {
+    border-color: #1e4035;
+    color: #1e4035;
+    background: #e8f4f0;
+  }
+
+  .topic-pill.selected {
+    background: #1e4035;
+    border-color: #1e4035;
+    color: white;
+  }
+
+  .topic-pill.pill-all {
+    background: #e8f4f0;
+    border-color: #1e4035;
+    color: #1e4035;
+    font-weight: 700;
+  }
+
+  .topic-pill.pill-all.active {
+    background: #1e4035;
+    color: white;
+  }
+
+  .subj-btn .subj-sel-count {
+    font-size: 10px;
+    color: #3d8068;
+    margin-top: 1px;
+    display: none;
+  }
+
+  .subj-btn.selected .subj-sel-count { display: block; }
+
+
+  /* Topic panel */
+  .topic-panel {
+    display: none;
+    margin-top: -8px;
+    margin-bottom: 16px;
+    background: #fff;
+    border: 1px solid #e0ddd5;
+    border-radius: 12px;
+    padding: 14px;
+    animation: fadeUp 0.2s ease;
+  }
+  .topic-panel.open { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  
+
+  .topic-panel-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #9999aa;
+    text-transform: uppercase;
+  }
+
+  .topic-select-all {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 1px;
+    color: #1e4035;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+  }
+
+  .topic-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  
+
+  .topic-chip:hover {
+    border-color: #1e4035;
+    color: #1e4035;
+  }
+
+  .topic-chip.selected {
+    background: #e8f4f0;
+    border-color: #1e4035;
+    color: #1e4035;
+  }
+
+  .topic-chip 
+
+  /* Subject btn — show expand arrow when selected */
+  .subj-btn.selected .subj-name::after {
+    content: ' ▾';
+    font-size: 10px;
+    color: #3d8068;
+  }
+  .subj-btn.selected.expanded .subj-name::after {
+    content: ' ▴';
+  }
+
+
+  /* ── REPORT MODAL ── */
+  #btn-report { display: none; }
+  .btn-link-sm {
+    background: none;
+    border: none;
+    color: #9999aa;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-family: 'DM Sans', sans-serif;
+    transition: color 0.15s;
+    align-self: center;
+  }
+  .btn-link-sm:hover { color: #c0392b; }
+
+  .report-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0;
+  }
+  .report-overlay.open {
+    display: flex;
+  }
+  .report-modal {
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    padding: 24px 20px 32px;
+    width: 100%;
+    max-width: 560px;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+  }
+  .report-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 4px;
+  }
+  .report-qid {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #9999aa;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .report-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .report-opt {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #3a3a52;
+    cursor: pointer;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #e0ddd5;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .report-opt:hover { border-color: #1e4035; background: #f0f7f4; }
+  .report-opt input[type="radio"] { accent-color: #1e4035; width: 16px; height: 16px; }
+  .report-textarea {
+    width: 100%;
+    border: 1.5px solid #e0ddd5;
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 13px;
+    font-family: 'DM Sans', sans-serif;
+    color: #3a3a52;
+    resize: none;
+    outline: none;
+    box-sizing: border-box;
+    margin-bottom: 16px;
+    transition: border-color 0.15s;
+  }
+  .report-textarea:focus { border-color: #1e4035; }
+  .report-actions {
+    display: flex;
+    gap: 10px;
+  }
+  .report-actions .btn-outline {
+    flex: 1;
+  }
+  .report-actions .btn-primary {
+    flex: 2;
+  }
+
 </style>
 </head>
 <body>
@@ -874,43 +1138,312 @@ body {
         <div class="subj-icon">📖</div>
         <div class="subj-name">English</div>
         <div class="subj-count">1,038 Qs</div>
+        <div class="subj-sel-count" id="sel-count-English">All topics</div>
       </div>
       <div class="subj-btn" data-subject="Physics" onclick="toggleSubject(this)">
         <div class="subj-icon">⚡</div>
         <div class="subj-name">Physics</div>
         <div class="subj-count">473 Qs</div>
+        <div class="subj-sel-count" id="sel-count-Physics">All topics</div>
       </div>
       <div class="subj-btn" data-subject="Chemistry" onclick="toggleSubject(this)">
         <div class="subj-icon">🧪</div>
         <div class="subj-name">Chemistry</div>
         <div class="subj-count">285 Qs</div>
+        <div class="subj-sel-count" id="sel-count-Chemistry">All topics</div>
       </div>
       <div class="subj-btn" data-subject="Biology" onclick="toggleSubject(this)">
         <div class="subj-icon">🧬</div>
         <div class="subj-name">Biology</div>
         <div class="subj-count">226 Qs</div>
+        <div class="subj-sel-count" id="sel-count-Biology">All topics</div>
       </div>
       <div class="subj-btn" data-subject="Geography" onclick="toggleSubject(this)">
         <div class="subj-icon">🌍</div>
         <div class="subj-name">Geography</div>
         <div class="subj-count">376 Qs</div>
+        <div class="subj-sel-count" id="sel-count-Geography">All topics</div>
       </div>
       <div class="subj-btn" data-subject="History" onclick="toggleSubject(this)">
         <div class="subj-icon">🏛️</div>
         <div class="subj-name">History</div>
         <div class="subj-count">314 Qs</div>
+        <div class="subj-sel-count" id="sel-count-History">All topics</div>
       </div>
       <div class="subj-btn" data-subject="Polity & Civics" onclick="toggleSubject(this)">
         <div class="subj-icon">⚖️</div>
-        <div class="subj-name">Polity</div>
+        <div class="subj-name">Polity & Civics</div>
         <div class="subj-count">96 Qs</div>
+        <div class="subj-sel-count" id="sel-count-Polity-and-Civics">All topics</div>
       </div>
       <div class="subj-btn" data-subject="General Knowledge" onclick="toggleSubject(this)">
         <div class="subj-icon">🌐</div>
-        <div class="subj-name">GK</div>
+        <div class="subj-name">General Knowledge</div>
         <div class="subj-count">295 Qs</div>
+        <div class="subj-sel-count" id="sel-count-General-Knowledge">All topics</div>
       </div>
     </div>
+
+    <!-- Topic pickers -->
+    <div class="topic-picker" id="picker-English">
+      <div class="topic-picker-title">Select topics for English (or leave All selected)</div>
+      <div class="topic-pills">
+        <span class="topic-pill pill-all active" onclick="selectAllTopics(this, 'English')" data-subject="English">All Topics</span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Synonyms">Synonyms <span style="opacity:0.5;font-size:10px">(161)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Spotting Errors">Spotting Errors <span style="opacity:0.5;font-size:10px">(151)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Antonyms">Antonyms <span style="opacity:0.5;font-size:10px">(150)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Idioms And Phrases">Idioms And Phrases <span style="opacity:0.5;font-size:10px">(80)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Ordering Of Words In A Sentence">Ordering Of Words In A Sentence <span style="opacity:0.5;font-size:10px">(65)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Fill In The Blanks">Fill In The Blanks <span style="opacity:0.5;font-size:10px">(64)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Sentence Improvement">Sentence Improvement <span style="opacity:0.5;font-size:10px">(58)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Selecting Words">Selecting Words <span style="opacity:0.5;font-size:10px">(55)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Comprehension">Comprehension <span style="opacity:0.5;font-size:10px">(31)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Sentence Rearrangement">Sentence Rearrangement <span style="opacity:0.5;font-size:10px">(25)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Reading Comprehension">Reading Comprehension <span style="opacity:0.5;font-size:10px">(23)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Discourse Markers">Discourse Markers <span style="opacity:0.5;font-size:10px">(20)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Ordering Of Sentences">Ordering Of Sentences <span style="opacity:0.5;font-size:10px">(18)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Vocabulary">Vocabulary <span style="opacity:0.5;font-size:10px">(17)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Sentence Ordering">Sentence Ordering <span style="opacity:0.5;font-size:10px">(16)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Fill In The Blank">Fill In The Blank <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Usage Of Paired Words">Usage Of Paired Words <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Cloze Test">Cloze Test <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Sentence Completion">Sentence Completion <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Grammar">Grammar <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Prepositions">Prepositions <span style="opacity:0.5;font-size:10px">(9)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Direct And Indirect Speech">Direct And Indirect Speech <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Cloze Comprehension">Cloze Comprehension <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Word Classes">Word Classes <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Parts Of Speech">Parts Of Speech <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Vocabulary - Word Meanings">Vocabulary - Word Meanings <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Vocabulary - Context">Vocabulary - Context <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Para Jumbles">Para Jumbles <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'English')" data-topic="Other">Other <span style="opacity:0.5;font-size:10px">(9)</span></span>
+
+      </div>
+    </div>
+    <div class="topic-picker" id="picker-Physics">
+      <div class="topic-picker-title">Select topics for Physics (or leave All selected)</div>
+      <div class="topic-pills">
+        <span class="topic-pill pill-all active" onclick="selectAllTopics(this, 'Physics')" data-subject="Physics">All Topics</span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Optics">Optics <span style="opacity:0.5;font-size:10px">(51)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Mechanics">Mechanics <span style="opacity:0.5;font-size:10px">(23)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Electricity">Electricity <span style="opacity:0.5;font-size:10px">(19)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Kinematics">Kinematics <span style="opacity:0.5;font-size:10px">(16)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Thermodynamics">Thermodynamics <span style="opacity:0.5;font-size:10px">(14)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Gravitation">Gravitation <span style="opacity:0.5;font-size:10px">(13)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Current Electricity">Current Electricity <span style="opacity:0.5;font-size:10px">(13)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Magnetism">Magnetism <span style="opacity:0.5;font-size:10px">(12)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Electromagnetism">Electromagnetism <span style="opacity:0.5;font-size:10px">(12)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Electrostatics">Electrostatics <span style="opacity:0.5;font-size:10px">(12)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Units And Measurements">Units And Measurements <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Simple Harmonic Motion">Simple Harmonic Motion <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Heat And Thermodynamics">Heat And Thermodynamics <span style="opacity:0.5;font-size:10px">(9)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Fluid Mechanics">Fluid Mechanics <span style="opacity:0.5;font-size:10px">(9)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Sound">Sound <span style="opacity:0.5;font-size:10px">(9)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Wave Motion">Wave Motion <span style="opacity:0.5;font-size:10px">(8)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="States Of Matter">States Of Matter <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Electromagnetic Spectrum">Electromagnetic Spectrum <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Modern Physics">Modern Physics <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Nuclear Physics">Nuclear Physics <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Work, Energy And Power">Work, Energy And Power <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Heat Transfer">Heat Transfer <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Properties Of Matter">Properties Of Matter <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Sound Waves">Sound Waves <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Electricity - Resistance">Electricity - Resistance <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Atomic Structure">Atomic Structure <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Atomic Physics">Atomic Physics <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Electromagnetic Waves">Electromagnetic Waves <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Sound And Waves">Sound And Waves <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Pressure">Pressure <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Circular Motion">Circular Motion <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Astronomy">Astronomy <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Units And Dimensions">Units And Dimensions <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Waves">Waves <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Friction">Friction <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Laws Of Motion">Laws Of Motion <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Physics')" data-topic="Other">Other <span style="opacity:0.5;font-size:10px">(147)</span></span>
+
+      </div>
+    </div>
+    <div class="topic-picker" id="picker-Chemistry">
+      <div class="topic-picker-title">Select topics for Chemistry (or leave All selected)</div>
+      <div class="topic-pills">
+        <span class="topic-pill pill-all active" onclick="selectAllTopics(this, 'Chemistry')" data-subject="Chemistry">All Topics</span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Atomic Structure">Atomic Structure <span style="opacity:0.5;font-size:10px">(19)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Chemical Reactions">Chemical Reactions <span style="opacity:0.5;font-size:10px">(18)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Organic Chemistry">Organic Chemistry <span style="opacity:0.5;font-size:10px">(14)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Acids And Bases">Acids And Bases <span style="opacity:0.5;font-size:10px">(12)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Chemical Compounds">Chemical Compounds <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Inorganic Chemistry">Inorganic Chemistry <span style="opacity:0.5;font-size:10px">(9)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Periodic Table">Periodic Table <span style="opacity:0.5;font-size:10px">(8)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="States Of Matter">States Of Matter <span style="opacity:0.5;font-size:10px">(8)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Chemical Bonding">Chemical Bonding <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Carbon Allotropes">Carbon Allotropes <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Redox Reactions">Redox Reactions <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Solutions">Solutions <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Mole Concept">Mole Concept <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Separation Techniques">Separation Techniques <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Physical And Chemical Changes">Physical And Chemical Changes <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Carbon And Its Compounds">Carbon And Its Compounds <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Atmospheric Chemistry">Atmospheric Chemistry <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Corrosion">Corrosion <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Fertilizers">Fertilizers <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Materials">Materials <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Mixtures">Mixtures <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Alloys">Alloys <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Gases">Gases <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Chemistry')" data-topic="Other">Other <span style="opacity:0.5;font-size:10px">(127)</span></span>
+
+      </div>
+    </div>
+    <div class="topic-picker" id="picker-Biology">
+      <div class="topic-picker-title">Select topics for Biology (or leave All selected)</div>
+      <div class="topic-pills">
+        <span class="topic-pill pill-all active" onclick="selectAllTopics(this, 'Biology')" data-subject="Biology">All Topics</span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Cell Biology">Cell Biology <span style="opacity:0.5;font-size:10px">(35)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Microbiology">Microbiology <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Plant Reproduction">Plant Reproduction <span style="opacity:0.5;font-size:10px">(8)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Ecology">Ecology <span style="opacity:0.5;font-size:10px">(8)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Human Anatomy">Human Anatomy <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Photosynthesis">Photosynthesis <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Plant Physiology">Plant Physiology <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Human Physiology">Human Physiology <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Nutrition And Health">Nutrition And Health <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Human Eye">Human Eye <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Taxonomy">Taxonomy <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Plant Anatomy">Plant Anatomy <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Nutrition">Nutrition <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Endocrine System">Endocrine System <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Nervous System">Nervous System <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Biodiversity">Biodiversity <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Molecular Biology">Molecular Biology <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Plant Tissues">Plant Tissues <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Digestive System">Digestive System <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Biology')" data-topic="Other">Other <span style="opacity:0.5;font-size:10px">(103)</span></span>
+
+      </div>
+    </div>
+    <div class="topic-picker" id="picker-Geography">
+      <div class="topic-picker-title">Select topics for Geography (or leave All selected)</div>
+      <div class="topic-pills">
+        <span class="topic-pill pill-all active" onclick="selectAllTopics(this, 'Geography')" data-subject="Geography">All Topics</span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Indian Geography">Indian Geography <span style="opacity:0.5;font-size:10px">(21)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Climatology">Climatology <span style="opacity:0.5;font-size:10px">(15)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Physical Geography">Physical Geography <span style="opacity:0.5;font-size:10px">(11)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Geomorphology">Geomorphology <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="World Geography">World Geography <span style="opacity:0.5;font-size:10px">(8)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Agriculture">Agriculture <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Ocean Currents">Ocean Currents <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Indian Rivers">Indian Rivers <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Geology">Geology <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Meteorology">Meteorology <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Time Zones">Time Zones <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="India - Industries">India - Industries <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Soil Science">Soil Science <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Rivers">Rivers <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Indian Railways">Indian Railways <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Oceanography">Oceanography <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Plate Tectonics">Plate Tectonics <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Weathering">Weathering <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Atmosphere">Atmosphere <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Seismology">Seismology <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Climate">Climate <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Indian Geography - Forests">Indian Geography - Forests <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Rivers Of India">Rivers Of India <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Indian Ports">Indian Ports <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Physical Geography - Weather">Physical Geography - Weather <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Indian Geography - Transport">Indian Geography - Transport <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Biogeography">Biogeography <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Soil Types">Soil Types <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Geography')" data-topic="Other">Other <span style="opacity:0.5;font-size:10px">(215)</span></span>
+
+      </div>
+    </div>
+    <div class="topic-picker" id="picker-History">
+      <div class="topic-picker-title">Select topics for History (or leave All selected)</div>
+      <div class="topic-pills">
+        <span class="topic-pill pill-all active" onclick="selectAllTopics(this, 'History')" data-subject="History">All Topics</span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Ancient Indian History">Ancient Indian History <span style="opacity:0.5;font-size:10px">(14)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="British India">British India <span style="opacity:0.5;font-size:10px">(12)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Colonial India">Colonial India <span style="opacity:0.5;font-size:10px">(11)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Indian Independence Movement">Indian Independence Movement <span style="opacity:0.5;font-size:10px">(11)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Industrial Revolution">Industrial Revolution <span style="opacity:0.5;font-size:10px">(10)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Medieval India">Medieval India <span style="opacity:0.5;font-size:10px">(9)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Medieval Indian History">Medieval Indian History <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Indian Freedom Struggle">Indian Freedom Struggle <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Indian Freedom Movement">Indian Freedom Movement <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Freedom Movement">Freedom Movement <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Ancient Indian Literature">Ancient Indian Literature <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Indian History">Indian History <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Indian National Movement">Indian National Movement <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Modern India">Modern India <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Modern Indian History">Modern Indian History <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Modern India - Freedom Struggle">Modern India - Freedom Struggle <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Modern Indian History - Social Reform">Modern Indian History - Social Reform <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Vijayanagara Empire">Vijayanagara Empire <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Modern India - Social Reform">Modern India - Social Reform <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Modern Indian History - Freedom Struggle">Modern Indian History - Freedom Struggle <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="French Revolution">French Revolution <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Art And Culture">Art And Culture <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Freedom Struggle">Freedom Struggle <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="World History">World History <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'History')" data-topic="Other">Other <span style="opacity:0.5;font-size:10px">(165)</span></span>
+
+      </div>
+    </div>
+    <div class="topic-picker" id="picker-Polity-and-Civics">
+      <div class="topic-picker-title">Select topics for Polity & Civics (or leave All selected)</div>
+      <div class="topic-pills">
+        <span class="topic-pill pill-all active" onclick="selectAllTopics(this, 'Polity & Civics')" data-subject="Polity & Civics">All Topics</span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Polity & Civics')" data-topic="Indian Constitution">Indian Constitution <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Polity & Civics')" data-topic="Constitution">Constitution <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Polity & Civics')" data-topic="Parliament">Parliament <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Polity & Civics')" data-topic="Fundamental Rights">Fundamental Rights <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Polity & Civics')" data-topic="Constitutional Amendments">Constitutional Amendments <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Polity & Civics')" data-topic="Constitutional Bodies">Constitutional Bodies <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Polity & Civics')" data-topic="Constitutional Provisions">Constitutional Provisions <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Polity & Civics')" data-topic="Indian Constitution - Schedules">Indian Constitution - Schedules <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Polity & Civics')" data-topic="Judiciary">Judiciary <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'Polity & Civics')" data-topic="Other">Other <span style="opacity:0.5;font-size:10px">(57)</span></span>
+
+      </div>
+    </div>
+    <div class="topic-picker" id="picker-General-Knowledge">
+      <div class="topic-picker-title">Select topics for General Knowledge (or leave All selected)</div>
+      <div class="topic-pills">
+        <span class="topic-pill pill-all active" onclick="selectAllTopics(this, 'General Knowledge')" data-subject="General Knowledge">All Topics</span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="International Relations">International Relations <span style="opacity:0.5;font-size:10px">(16)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Government Schemes">Government Schemes <span style="opacity:0.5;font-size:10px">(15)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Sports">Sports <span style="opacity:0.5;font-size:10px">(8)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Defense">Defense <span style="opacity:0.5;font-size:10px">(8)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="International Organizations">International Organizations <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Chemistry">Chemistry <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Physics">Physics <span style="opacity:0.5;font-size:10px">(7)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Five Year Plans">Five Year Plans <span style="opacity:0.5;font-size:10px">(6)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Geography">Geography <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Indian Economy">Indian Economy <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="International Events">International Events <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Military Exercises">Military Exercises <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Environment">Environment <span style="opacity:0.5;font-size:10px">(5)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Space Technology">Space Technology <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Government Organizations">Government Organizations <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Cricket">Cricket <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Awards">Awards <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Government Initiatives">Government Initiatives <span style="opacity:0.5;font-size:10px">(4)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Sports - Cricket">Sports - Cricket <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Film Awards">Film Awards <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="United Nations">United Nations <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Environmental Science">Environmental Science <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Badminton">Badminton <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Personalities">Personalities <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="International Days">International Days <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Economic Planning">Economic Planning <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Science And Technology">Science And Technology <span style="opacity:0.5;font-size:10px">(3)</span></span>
+        <span class="topic-pill" onclick="toggleTopic(this, 'General Knowledge')" data-topic="Other">Other <span style="opacity:0.5;font-size:10px">(149)</span></span>
+
+      </div>
+    </div>
+
 
     <!-- Session length -->
     <div class="section-title">Number of Questions</div>
@@ -939,13 +1472,16 @@ body {
       <div class="card" style="padding:0 16px" id="history-rows"></div>
     </div>
 
+    <!-- Sticky start button -->
+    <div class="setup-sticky-btn">
+      <button class="btn-primary" id="btn-start" onclick="startQuiz()" disabled>
+        Start Mission →
+      </button>
+    </div>
+
   </div>
 
-  <div class="setup-footer">
-    <button class="btn-primary" id="btn-start" onclick="startQuiz()" disabled>
-      Start Mission →
-    </button>
-  </div>
+  <!-- footer removed, button is sticky inside body -->
 </div>
 
 
@@ -993,7 +1529,28 @@ body {
   </div>
 
   <div class="quiz-footer" id="quiz-footer">
+    <button class="btn-link-sm" id="btn-report" onclick="openReport()">⚑ Report an issue</button>
     <button class="btn-primary" onclick="nextQuestion()">Next Question →</button>
+  </div>
+
+  <!-- Report modal -->
+  <div id="report-overlay" class="report-overlay" onclick="closeReport()">
+    <div class="report-modal" onclick="event.stopPropagation()">
+      <div class="report-title">Report an Issue</div>
+      <div class="report-qid" id="report-qid"></div>
+      <div class="report-options">
+        <label class="report-opt"><input type="radio" name="report-type" value="Wrong answer"> Wrong answer key</label>
+        <label class="report-opt"><input type="radio" name="report-type" value="Typo in question"> Typo in question</label>
+        <label class="report-opt"><input type="radio" name="report-type" value="Typo in options"> Typo in options</label>
+        <label class="report-opt"><input type="radio" name="report-type" value="Wrong explanation"> Wrong explanation</label>
+        <label class="report-opt"><input type="radio" name="report-type" value="Other"> Other</label>
+      </div>
+      <textarea id="report-note" class="report-textarea" placeholder="Additional details (optional)..." rows="3"></textarea>
+      <div class="report-actions">
+        <button class="btn-outline" onclick="closeReport()">Cancel</button>
+        <button class="btn-primary" onclick="submitReport()">Submit Report</button>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -1075,6 +1632,8 @@ let isGuest = false;
 // ══════════════════════════════════════════════════
 let state = {
   selectedSubjects: [],
+  selectedTopics: {},  // subject -> [topics] or [] meaning all
+  selectedTopics: {},
   sessionLength: 20,
   questions: [],
   idx: 0,
@@ -1237,6 +1796,9 @@ async function signOut() {
 // ENTER APP (go to setup)
 // ══════════════════════════════════════════════════
 function enterApp(name) {
+  // Reset selections for clean setup screen
+  state.selectedSubjects = [];
+  state.selectedTopics = {};
   state.cadetName = name.charAt(0).toUpperCase() + name.slice(1);
   const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
 
@@ -1256,10 +1818,88 @@ function enterApp(name) {
 // SETUP SCREEN
 // ══════════════════════════════════════════════════
 function toggleSubject(el) {
-  el.classList.toggle('selected');
+  const subj = el.dataset.subject;
+  // Capture BEFORE deselecting anything
+  const isAlreadySelected = el.classList.contains('selected');
+
+  // Deselect all OTHER subjects and close their pickers
+  document.querySelectorAll('.subj-btn.selected').forEach(btn => {
+    if (btn === el) return; // skip the clicked one
+    btn.classList.remove('selected', 'expanded');
+    const otherId = btn.dataset.subject.replace(/ /g,'-').replace(/&/g,'and').replace(/'/g,'');
+    const otherPicker = document.getElementById('picker-' + otherId);
+    if (otherPicker) otherPicker.classList.remove('open');
+    delete state.selectedTopics[btn.dataset.subject];
+  });
+
+  const safeId = subj.replace(/ /g,'-').replace(/&/g,'and').replace(/'/g,'');
+  const picker = document.getElementById('picker-' + safeId);
+
+  if (isAlreadySelected) {
+    // Clicking same subject — deselect it
+    el.classList.remove('selected', 'expanded');
+    if (picker) picker.classList.remove('open');
+    delete state.selectedTopics[subj];
+  } else {
+    // Selecting new subject
+    el.classList.add('selected', 'expanded');
+    if (picker) {
+      picker.classList.add('open');
+      setTimeout(() => picker.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    }
+  }
+
   state.selectedSubjects = [...document.querySelectorAll('.subj-btn.selected')]
     .map(b => b.dataset.subject);
   document.getElementById('btn-start').disabled = state.selectedSubjects.length === 0;
+}
+
+
+
+
+
+
+
+
+function selectAllTopics(pill, subj) {
+  const safeId = subj.replace(/ /g,'-').replace(/&/g,'and').replace(/'/g,'');
+  const picker = document.getElementById('picker-' + safeId);
+  picker.querySelectorAll('.topic-pill:not(.pill-all)').forEach(p => p.classList.remove('selected'));
+  pill.classList.add('active');
+  if (!state.selectedTopics) state.selectedTopics = {};
+  delete state.selectedTopics[subj];
+  const countEl = document.getElementById('sel-count-' + safeId);
+  if (countEl) { countEl.textContent = 'All topics'; }
+}
+
+function toggleTopic(pill, subj) {
+  const safeId = subj.replace(/ /g,'-').replace(/&/g,'and').replace(/'/g,'');
+  const picker = document.getElementById('picker-' + safeId);
+  const allBtn = picker.querySelector('.pill-all');
+
+  pill.classList.toggle('selected');
+
+  // Deactivate "All" button if any specific topic is selected
+  const anySelected = picker.querySelectorAll('.topic-pill:not(.pill-all).selected').length > 0;
+  allBtn.classList.toggle('active', !anySelected);
+  if (!anySelected) allBtn.classList.add('active');
+
+  // Save selected topics
+  if (!state.selectedTopics) state.selectedTopics = {};
+  const selected = [...picker.querySelectorAll('.topic-pill:not(.pill-all).selected')]
+    .map(p => p.dataset.topic);
+  if (selected.length === 0) {
+    delete state.selectedTopics[subj];
+  } else {
+    state.selectedTopics[subj] = selected;
+  }
+
+  // Update count label
+  const countEl = document.getElementById('sel-count-' + safeId);
+  if (countEl) {
+    countEl.textContent = selected.length === 0 ? 'All topics' : selected.length + ' topic' + (selected.length > 1 ? 's' : '');
+    countEl.style.display = selected.length > 0 ? 'block' : 'block';
+  }
 }
 
 function selectLength(el) {
@@ -1326,36 +1966,33 @@ function pickQuestion(usedIds) {
   const diff = getNextDifficulty();
   state.difficulty = diff;
 
-  // Build full pool for selected subjects excluding used
-  const fullPool = ALL_QUESTIONS.filter(q =>
-    state.selectedSubjects.includes(q.subject) && !usedIds.has(q.question_id)
-  );
+  const fullPool = ALL_QUESTIONS.filter(q => {
+    if (!state.selectedSubjects.includes(q.subject)) return false;
+    if (usedIds.has(q.question_id)) return false;
+    const topicFilter = state.selectedTopics[q.subject];
+    if (topicFilter && topicFilter.length > 0 && !topicFilter.includes(q.topic)) return false;
+    return true;
+  });
 
   if (fullPool.length === 0) return null;
 
-  // Try: target subject + target difficulty
   const targetSubj = Math.random() < 0.65 ? getWeakestSubject()
     : state.selectedSubjects[Math.floor(Math.random() * state.selectedSubjects.length)];
 
   let pool = fullPool.filter(q => q.subject === targetSubj && q.difficulty === diff);
-
-  // Fallback 1: any subject, target difficulty
   if (pool.length === 0) pool = fullPool.filter(q => q.difficulty === diff);
-
-  // Fallback 2: target subject, any difficulty
   if (pool.length === 0) pool = fullPool.filter(q => q.subject === targetSubj);
-
-  // Fallback 3: any subject, any difficulty
   if (pool.length === 0) pool = fullPool;
 
   return pool[Math.floor(Math.random() * pool.length)];
 }
 
-// ══════════════════════════════════════════════════
-// START QUIZ
-// ══════════════════════════════════════════════════
+
 function startQuiz() {
-  if (state.selectedSubjects.length === 0) return;
+  if (state.selectedSubjects.length === 0) {
+    toast('Please select a subject first!');
+    return;
+  }
 
   // Reset state — preserve selectedSubjects and sessionLength
   state.idx = 0;
@@ -1369,6 +2006,7 @@ function startQuiz() {
   state.streak = 0;
   state.wrongStreak = 0;
   state.questions = [];
+  // Note: selectedTopics preserved from setup screen
 
   // Pre-select questions
   const used = new Set();
@@ -1431,6 +2069,8 @@ function renderQ() {
   // Reset feedback + footer
   document.getElementById('feedback').className = 'feedback';
   document.getElementById('quiz-footer').className = 'quiz-footer';
+  const rBtn = document.getElementById('btn-report');
+  if (rBtn) rBtn.style.display = 'none';
   state.answered = false;
 
   // Scroll to top
@@ -1483,6 +2123,7 @@ function answer(chosen) {
 
   // Show next button + scroll feedback into view
   document.getElementById('quiz-footer').className = 'quiz-footer show';
+  document.getElementById('btn-report').style.display = 'inline-block';
   setTimeout(() => {
     document.getElementById('feedback').scrollIntoView({behavior:'smooth', block:'nearest'});
   }, 150);
@@ -1618,6 +2259,12 @@ function show(screenId) {
 }
 
 function goSetup() {
+  // Reset subject + topic selections
+  document.querySelectorAll('.subj-btn.selected').forEach(b => b.classList.remove('selected','expanded'));
+  document.querySelectorAll('.topic-picker.open').forEach(p => p.classList.remove('open'));
+  state.selectedSubjects = [];
+  state.selectedTopics = {};
+  document.getElementById('btn-start').disabled = true;
   loadHistory();
   show('s-setup');
 }
@@ -1633,6 +2280,39 @@ function toast(msg, ms=3000) {
 // INIT
 // ══════════════════════════════════════════════════
 initAuth();
+
+function openReport() {
+  const q = state.questions[state.idx];
+  document.getElementById('report-qid').textContent = 'Q' + q.question_id + ' · ' + q.subject + ' · ' + q.year;
+  document.querySelectorAll('input[name="report-type"]').forEach(r => r.checked = false);
+  document.getElementById('report-note').value = '';
+  document.getElementById('report-overlay').classList.add('open');
+}
+
+function closeReport() {
+  document.getElementById('report-overlay').classList.remove('open');
+}
+
+function submitReport() {
+  const q = state.questions[state.idx];
+  const typeEl = document.querySelector('input[name="report-type"]:checked');
+  if (!typeEl) { toast('Please select an issue type'); return; }
+  const report = {
+    question_id: q.question_id,
+    subject: q.subject,
+    year: q.year,
+    issue_type: typeEl.value,
+    note: document.getElementById('report-note').value.trim(),
+    reported_at: new Date().toISOString(),
+    reported_by: state.cadetName || 'Guest'
+  };
+  const existing = JSON.parse(localStorage.getItem('nda_reports') || '[]');
+  existing.push(report);
+  localStorage.setItem('nda_reports', JSON.stringify(existing));
+  closeReport();
+  toast('✓ Report submitted — thank you!');
+}
+
 </script>
 
 </body>
